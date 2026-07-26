@@ -1,0 +1,1 @@
+COMMENT ON TABLE public.students IS 'Preschool students';
