@@ -1,9 +1,11 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { Plus } from "lucide-react";
+import { ImagePlus, Plus, X } from "lucide-react";
+
 import { toast } from "sonner";
 
 import { supabase } from "@/integrations/supabase/client";
+import { STUDENT_PHOTOS_BUCKET } from "@/components/StudentPhoto";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -37,9 +39,36 @@ const EMPTY = {
 export function AddStudentDialog({ classes }: { classes: ClassOption[] }) {
   const [open, setOpen] = useState(false);
   const [form, setForm] = useState({ ...EMPTY });
+  const [photo, setPhoto] = useState<File | null>(null);
+  const [photoPreview, setPhotoPreview] = useState<string | null>(null);
+  const fileRef = useRef<HTMLInputElement>(null);
   const queryClient = useQueryClient();
 
   const set = (k: keyof typeof EMPTY, v: string) => setForm((f) => ({ ...f, [k]: v }));
+
+  const clearPhoto = () => {
+    setPhoto(null);
+    setPhotoPreview((p) => {
+      if (p) URL.revokeObjectURL(p);
+      return null;
+    });
+    if (fileRef.current) fileRef.current.value = "";
+  };
+
+  const onPickPhoto = (file: File | undefined) => {
+    if (!file) return;
+    if (!file.type.startsWith("image/")) {
+      toast.error("Please choose an image file");
+      return;
+    }
+    if (file.size > 5 * 1024 * 1024) {
+      toast.error("Image must be under 5 MB");
+      return;
+    }
+    clearPhoto();
+    setPhoto(file);
+    setPhotoPreview(URL.createObjectURL(file));
+  };
 
   const mutation = useMutation({
     mutationFn: async () => {
@@ -49,10 +78,22 @@ export function AddStudentDialog({ classes }: { classes: ClassOption[] }) {
       if (!admission || admission.length > 50) throw new Error("Enter a valid admission number");
       if (!form.class_id) throw new Error("Select a class");
 
+      let photoPath: string | null = null;
+      if (photo) {
+        const ext = (photo.name.split(".").pop() || "jpg").toLowerCase().replace(/[^a-z0-9]/g, "");
+        const path = `${crypto.randomUUID()}.${ext || "jpg"}`;
+        const { error: uploadError } = await supabase.storage
+          .from(STUDENT_PHOTOS_BUCKET)
+          .upload(path, photo, { contentType: photo.type, upsert: false });
+        if (uploadError) throw new Error(`Photo upload failed: ${uploadError.message}`);
+        photoPath = path;
+      }
+
       const { error } = await supabase.from("students").insert({
         full_name: name,
         admission_number: admission,
         class_id: form.class_id,
+        photo_url: photoPath,
         roll_number: form.roll_number ? Number(form.roll_number) : null,
         date_of_birth: form.date_of_birth || null,
         gender: (form.gender || null) as "male" | "female" | "other" | null,
@@ -62,13 +103,19 @@ export function AddStudentDialog({ classes }: { classes: ClassOption[] }) {
         mobile_number: form.mobile_number.trim() || null,
         address: form.address.trim() || null,
       });
-      if (error) throw error;
+      if (error) {
+        if (photoPath) await supabase.storage.from(STUDENT_PHOTOS_BUCKET).remove([photoPath]);
+        throw error;
+      }
+
     },
     onSuccess: () => {
       toast.success(`${form.full_name} added`);
       queryClient.invalidateQueries({ queryKey: ["all-students"] });
       queryClient.invalidateQueries({ queryKey: ["students"] });
       setForm({ ...EMPTY });
+      clearPhoto();
+
       setOpen(false);
     },
     onError: (e: Error) => toast.error(e.message || "Could not add student"),
@@ -88,6 +135,40 @@ export function AddStudentDialog({ classes }: { classes: ClassOption[] }) {
         </DialogHeader>
 
         <div className="grid gap-4 sm:grid-cols-2">
+          <div className="sm:col-span-2 flex items-center gap-4">
+            <div className="relative">
+              {photoPreview ? (
+                <img src={photoPreview} alt="Selected student" className="h-20 w-20 rounded-full object-cover" />
+              ) : (
+                <div className="grid h-20 w-20 place-items-center rounded-full bg-primary/10 text-primary">
+                  <ImagePlus className="h-7 w-7" />
+                </div>
+              )}
+              {photoPreview && (
+                <button
+                  type="button"
+                  onClick={clearPhoto}
+                  aria-label="Remove photo"
+                  className="absolute -right-1 -top-1 grid h-6 w-6 place-items-center rounded-full bg-background shadow ring-1 ring-border"
+                >
+                  <X className="h-3.5 w-3.5" />
+                </button>
+              )}
+            </div>
+            <div className="space-y-1.5">
+              <Label htmlFor="photo">Profile photo</Label>
+              <Input
+                id="photo"
+                ref={fileRef}
+                type="file"
+                accept="image/*"
+                onChange={(e) => onPickPhoto(e.target.files?.[0])}
+                className="cursor-pointer"
+              />
+              <p className="text-xs text-muted-foreground">JPG or PNG, up to 5 MB.</p>
+            </div>
+          </div>
+
           <div className="sm:col-span-2 space-y-1.5">
             <Label htmlFor="full_name">Full name *</Label>
             <Input id="full_name" maxLength={100} value={form.full_name} onChange={(e) => set("full_name", e.target.value)} />
