@@ -152,6 +152,7 @@ function AttendancePage() {
               <SelectValue placeholder="Select class" />
             </SelectTrigger>
             <SelectContent>
+              {isAdmin && <SelectItem value="all">All classes</SelectItem>}
               {classesQuery.data?.map((c) => (
                 <SelectItem key={c.id} value={c.id}>{c.name}</SelectItem>
               ))}
