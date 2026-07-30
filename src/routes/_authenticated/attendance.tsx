@@ -209,7 +209,7 @@ function AttendancePage() {
                 <div className="min-w-0 flex-1">
                   <div className="truncate font-semibold">{s.full_name}</div>
                   <div className="text-xs text-muted-foreground">
-                    Roll {s.roll_number ?? "—"} · {s.admission_number}
+                    {allClasses ? `${classMap.get(s.class_id) ?? "—"} · ` : ""}Roll {s.roll_number ?? "—"} · {s.admission_number}
                   </div>
                 </div>
                 {sel && (
