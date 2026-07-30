@@ -6,7 +6,10 @@ import { ArrowLeft, ChevronLeft, ChevronRight, Cake, Phone, Home, User } from "l
 import { supabase } from "@/integrations/supabase/client";
 import { StudentPhoto } from "@/components/StudentPhoto";
 import { STATUS_META, type AttendanceStatus } from "@/lib/attendance";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { cn } from "@/lib/utils";
+
+const MONTHS = ["January","February","March","April","May","June","July","August","September","October","November","December"];
 
 export const Route = createFileRoute("/_authenticated/students/$id")({
   head: ({ params }) => ({
@@ -23,6 +26,8 @@ export const Route = createFileRoute("/_authenticated/students/$id")({
 function StudentDetail() {
   const { id } = Route.useParams();
   const [monthOffset, setMonthOffset] = useState(0);
+  const [filterMonth, setFilterMonth] = useState<string>(String(new Date().getMonth()));
+  const [filterYear, setFilterYear] = useState<string>(String(new Date().getFullYear()));
 
   const query = useQuery({
     queryKey: ["student", id],
@@ -53,6 +58,29 @@ function StudentDetail() {
     const pct = working ? Math.round(((t.present + t.late) / working) * 100) : 0;
     return { ...t, working, pct };
   }, [attendance]);
+
+  const years = useMemo(
+    () => Array.from(new Set(attendance.map((r) => Number(r.date.slice(0, 4))))).sort((a, b) => b - a),
+    [attendance],
+  );
+
+  const history = useMemo(() => {
+    return attendance
+      .filter((r) => {
+        const [y, m] = r.date.split("-");
+        if (filterYear !== "all" && y !== filterYear) return false;
+        if (filterMonth !== "all" && Number(m) - 1 !== Number(filterMonth)) return false;
+        return true;
+      })
+      .sort((a, b) => (a.date < b.date ? 1 : -1));
+  }, [attendance, filterMonth, filterYear]);
+
+  const filteredTotals = useMemo(() => {
+    const t = { present: 0, absent: 0, late: 0, leave: 0 };
+    for (const r of history) t[r.status as AttendanceStatus]++;
+    const pct = history.length ? Math.round(((t.present + t.late) / history.length) * 100) : 0;
+    return { ...t, pct };
+  }, [history]);
 
   const now = new Date();
   const viewMonth = new Date(now.getFullYear(), now.getMonth() + monthOffset, 1);
