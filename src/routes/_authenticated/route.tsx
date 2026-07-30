@@ -56,10 +56,9 @@ function AuthenticatedLayout() {
       {/* Top bar (mobile) */}
       <div className="sticky top-0 z-30 flex items-center justify-between border-b border-border bg-card/80 px-4 py-3 backdrop-blur lg:hidden">
         <Link to="/dashboard" className="flex items-center gap-2">
-          <div className="grid h-9 w-9 place-items-center rounded-xl bg-primary text-primary-foreground">
-            <Sparkles className="h-4 w-4" />
-          </div>
-          <span className="font-bold font-display">Little Millennium</span>
+          <BrandLogo className="h-9" />
+          <span className="font-bold font-display">Little Millennium Attendance</span>
+        </Link>
         </Link>
         <button
           onClick={() => setMobileOpen((v) => !v)}
