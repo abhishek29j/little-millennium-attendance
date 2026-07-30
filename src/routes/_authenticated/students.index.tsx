@@ -10,7 +10,7 @@ import { StudentPhoto } from "@/components/StudentPhoto";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
-export const Route = createFileRoute("/_authenticated/students")({
+export const Route = createFileRoute("/_authenticated/students/")({
   head: () => ({
     meta: [
       { title: "Students · Little Millennium Attendance" },
