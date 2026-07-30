@@ -114,6 +114,8 @@ export function AddStudentDialog({ classes }: { classes: ClassOption[] }) {
       queryClient.invalidateQueries({ queryKey: ["all-students"] });
       queryClient.invalidateQueries({ queryKey: ["students"] });
       setForm({ ...EMPTY });
+      clearPhoto();
+
       setOpen(false);
     },
     onError: (e: Error) => toast.error(e.message || "Could not add student"),
