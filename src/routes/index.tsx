@@ -1,6 +1,7 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { Sparkles, CalendarCheck, LineChart, Users, Heart, ShieldCheck } from "lucide-react";
+import { CalendarCheck, LineChart, Users, Heart, ShieldCheck } from "lucide-react";
+import { BrandLogo } from "@/components/BrandLogo";
 import { supabase } from "@/integrations/supabase/client";
 
 export const Route = createFileRoute("/")({
