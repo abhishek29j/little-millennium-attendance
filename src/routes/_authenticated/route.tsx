@@ -1,8 +1,9 @@
 import { createFileRoute, redirect, Outlet, Link, useNavigate, useRouterState } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { LayoutDashboard, CalendarCheck2, Users, LogOut, Sparkles, Menu, X } from "lucide-react";
+import { LayoutDashboard, CalendarCheck2, Users, LogOut, Menu, X } from "lucide-react";
 
 import { supabase } from "@/integrations/supabase/client";
+import { BrandLogo } from "@/components/BrandLogo";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
@@ -56,10 +57,8 @@ function AuthenticatedLayout() {
       {/* Top bar (mobile) */}
       <div className="sticky top-0 z-30 flex items-center justify-between border-b border-border bg-card/80 px-4 py-3 backdrop-blur lg:hidden">
         <Link to="/dashboard" className="flex items-center gap-2">
-          <div className="grid h-9 w-9 place-items-center rounded-xl bg-primary text-primary-foreground">
-            <Sparkles className="h-4 w-4" />
-          </div>
-          <span className="font-bold font-display">Little Millennium</span>
+          <BrandLogo className="h-9" />
+          <span className="font-bold font-display">Little Millennium Attendance</span>
         </Link>
         <button
           onClick={() => setMobileOpen((v) => !v)}
@@ -79,9 +78,7 @@ function AuthenticatedLayout() {
           )}
         >
           <div className="mb-6 hidden items-center gap-3 lg:flex">
-            <div className="grid h-11 w-11 place-items-center rounded-2xl bg-primary text-primary-foreground shadow">
-              <Sparkles className="h-5 w-5" />
-            </div>
+            <BrandLogo className="h-12" />
             <div className="leading-tight">
               <div className="font-bold font-display">Little Millennium</div>
               <div className="text-xs text-muted-foreground">Attendance</div>

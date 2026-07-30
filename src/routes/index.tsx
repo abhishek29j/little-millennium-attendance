@@ -1,6 +1,7 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { Sparkles, CalendarCheck, LineChart, Users, Heart, ShieldCheck } from "lucide-react";
+import { CalendarCheck, LineChart, Users, Heart, ShieldCheck } from "lucide-react";
+import { BrandLogo } from "@/components/BrandLogo";
 import { supabase } from "@/integrations/supabase/client";
 
 export const Route = createFileRoute("/")({
@@ -32,9 +33,7 @@ function Landing() {
     <div className="min-h-screen">
       <header className="mx-auto flex max-w-6xl items-center justify-between px-6 py-6">
         <div className="flex items-center gap-3">
-          <div className="grid h-11 w-11 place-items-center rounded-2xl bg-primary text-primary-foreground shadow-sm">
-            <Sparkles className="h-5 w-5" />
-          </div>
+          <BrandLogo className="h-12" />
           <div>
             <div className="text-lg font-bold font-display leading-none">Little Millennium</div>
             <div className="text-xs text-muted-foreground">Attendance Management</div>
