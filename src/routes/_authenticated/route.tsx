@@ -59,7 +59,6 @@ function AuthenticatedLayout() {
           <BrandLogo className="h-9" />
           <span className="font-bold font-display">Little Millennium Attendance</span>
         </Link>
-        </Link>
         <button
           onClick={() => setMobileOpen((v) => !v)}
           className="grid h-10 w-10 place-items-center rounded-full bg-muted"
