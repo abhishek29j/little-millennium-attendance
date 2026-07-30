@@ -185,6 +185,71 @@ function StudentDetail() {
           <span className="ml-auto text-muted-foreground">Total working days recorded: {totals.working}</span>
         </div>
       </section>
+
+      <section className="rounded-3xl border border-border bg-card p-5 shadow-sm">
+        <div className="mb-4 flex flex-wrap items-center gap-3">
+          <h3 className="font-display text-lg font-bold">Attendance history</h3>
+          <div className="ml-auto flex flex-wrap items-center gap-2">
+            <Select value={filterMonth} onValueChange={setFilterMonth}>
+              <SelectTrigger className="h-10 w-40 rounded-full bg-background"><SelectValue placeholder="Month" /></SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All months</SelectItem>
+                {MONTHS.map((m, i) => <SelectItem key={m} value={String(i)}>{m}</SelectItem>)}
+              </SelectContent>
+            </Select>
+            <Select value={filterYear} onValueChange={setFilterYear}>
+              <SelectTrigger className="h-10 w-32 rounded-full bg-background"><SelectValue placeholder="Year" /></SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All years</SelectItem>
+                {years.map((y) => <SelectItem key={y} value={String(y)}>{y}</SelectItem>)}
+              </SelectContent>
+            </Select>
+          </div>
+        </div>
+
+        <div className="mb-3 flex flex-wrap gap-2 text-xs">
+          {(Object.keys(STATUS_META) as AttendanceStatus[]).map((k) => (
+            <span key={k} className="rounded-full bg-muted px-3 py-1 font-semibold">
+              {STATUS_META[k].label}: {filteredTotals[k]}
+            </span>
+          ))}
+          <span className="rounded-full bg-primary/15 px-3 py-1 font-semibold text-primary">
+            {filteredTotals.pct}% attendance · {history.length} days
+          </span>
+        </div>
+
+        <div className="overflow-x-auto rounded-2xl border border-border">
+          <table className="w-full text-sm">
+            <thead className="bg-muted/60 text-xs uppercase tracking-wide text-muted-foreground">
+              <tr>
+                <th className="px-4 py-2.5 text-left font-semibold">Date</th>
+                <th className="px-4 py-2.5 text-left font-semibold">Day</th>
+                <th className="px-4 py-2.5 text-left font-semibold">Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              {history.map((r) => {
+                const d = new Date(`${r.date}T12:00:00`);
+                const meta = STATUS_META[r.status as AttendanceStatus];
+                return (
+                  <tr key={r.date} className="border-t border-border">
+                    <td className="px-4 py-2.5 font-medium">{d.toLocaleDateString()}</td>
+                    <td className="px-4 py-2.5 text-muted-foreground">{d.toLocaleDateString(undefined, { weekday: "long" })}</td>
+                    <td className="px-4 py-2.5">
+                      <span className={cn("inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-semibold", `bg-${meta.tone}/30 text-${meta.tone}-foreground`)}>
+                        <span>{meta.emoji}</span> {meta.label}
+                      </span>
+                    </td>
+                  </tr>
+                );
+              })}
+              {history.length === 0 && (
+                <tr><td colSpan={3} className="px-4 py-8 text-center text-muted-foreground">No attendance records for this period.</td></tr>
+              )}
+            </tbody>
+          </table>
+        </div>
+      </section>
     </div>
   );
 }
