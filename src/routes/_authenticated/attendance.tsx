@@ -51,16 +51,18 @@ function AttendancePage() {
     else if (classesQuery.data?.[0]) setClassId(classesQuery.data[0].id);
   }, [isAdmin, teacherClassId, classesQuery.data, classId]);
 
+  const allClasses = classId === "all";
+
   const studentsQuery = useQuery({
     queryKey: ["students", classId],
     enabled: !!classId,
     queryFn: async () => {
-      const { data, error } = await supabase
+      let query = supabase
         .from("students")
-        .select("id, full_name, roll_number, admission_number, photo_url")
-        .eq("class_id", classId)
-        .eq("is_active", true)
-        .order("roll_number", { nullsFirst: true });
+        .select("id, full_name, roll_number, admission_number, photo_url, class_id")
+        .eq("is_active", true);
+      if (!allClasses) query = query.eq("class_id", classId);
+      const { data, error } = await query.order("roll_number", { nullsFirst: true });
       if (error) throw error;
       return data;
     },
@@ -70,15 +72,14 @@ function AttendancePage() {
     queryKey: ["attendance", classId, date],
     enabled: !!classId,
     queryFn: async () => {
-      const { data, error } = await supabase
-        .from("attendance")
-        .select("student_id, status")
-        .eq("class_id", classId)
-        .eq("date", date);
+      let query = supabase.from("attendance").select("student_id, status").eq("date", date);
+      if (!allClasses) query = query.eq("class_id", classId);
+      const { data, error } = await query;
       if (error) throw error;
       return data;
     },
   });
+
 
   // Seed selections from existing records
   useEffect(() => {
@@ -89,6 +90,10 @@ function AttendancePage() {
   }, [existingQuery.data]);
 
   const students = studentsQuery.data ?? [];
+  const classMap = useMemo(
+    () => new Map((classesQuery.data ?? []).map((c) => [c.id, c.name] as const)),
+    [classesQuery.data],
+  );
   const stats = useMemo(() => {
     const s = { present: 0, absent: 0, late: 0, leave: 0 };
     for (const st of students) {
@@ -112,7 +117,7 @@ function AttendancePage() {
       .filter((s) => selections[s.id])
       .map((s) => ({
         student_id: s.id,
-        class_id: classId,
+        class_id: s.class_id,
         date,
         status: selections[s.id],
         marked_by: uid,
@@ -151,6 +156,7 @@ function AttendancePage() {
               <SelectValue placeholder="Select class" />
             </SelectTrigger>
             <SelectContent>
+              {isAdmin && <SelectItem value="all">All classes</SelectItem>}
               {classesQuery.data?.map((c) => (
                 <SelectItem key={c.id} value={c.id}>{c.name}</SelectItem>
               ))}
@@ -203,7 +209,7 @@ function AttendancePage() {
                 <div className="min-w-0 flex-1">
                   <div className="truncate font-semibold">{s.full_name}</div>
                   <div className="text-xs text-muted-foreground">
-                    Roll {s.roll_number ?? "—"} · {s.admission_number}
+                    {allClasses ? `${classMap.get(s.class_id) ?? "—"} · ` : ""}Roll {s.roll_number ?? "—"} · {s.admission_number}
                   </div>
                 </div>
                 {sel && (
