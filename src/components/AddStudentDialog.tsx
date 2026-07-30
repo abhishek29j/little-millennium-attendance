@@ -135,6 +135,40 @@ export function AddStudentDialog({ classes }: { classes: ClassOption[] }) {
         </DialogHeader>
 
         <div className="grid gap-4 sm:grid-cols-2">
+          <div className="sm:col-span-2 flex items-center gap-4">
+            <div className="relative">
+              {photoPreview ? (
+                <img src={photoPreview} alt="Selected student" className="h-20 w-20 rounded-full object-cover" />
+              ) : (
+                <div className="grid h-20 w-20 place-items-center rounded-full bg-primary/10 text-primary">
+                  <ImagePlus className="h-7 w-7" />
+                </div>
+              )}
+              {photoPreview && (
+                <button
+                  type="button"
+                  onClick={clearPhoto}
+                  aria-label="Remove photo"
+                  className="absolute -right-1 -top-1 grid h-6 w-6 place-items-center rounded-full bg-background shadow ring-1 ring-border"
+                >
+                  <X className="h-3.5 w-3.5" />
+                </button>
+              )}
+            </div>
+            <div className="space-y-1.5">
+              <Label htmlFor="photo">Profile photo</Label>
+              <Input
+                id="photo"
+                ref={fileRef}
+                type="file"
+                accept="image/*"
+                onChange={(e) => onPickPhoto(e.target.files?.[0])}
+                className="cursor-pointer"
+              />
+              <p className="text-xs text-muted-foreground">JPG or PNG, up to 5 MB.</p>
+            </div>
+          </div>
+
           <div className="sm:col-span-2 space-y-1.5">
             <Label htmlFor="full_name">Full name *</Label>
             <Input id="full_name" maxLength={100} value={form.full_name} onChange={(e) => set("full_name", e.target.value)} />
