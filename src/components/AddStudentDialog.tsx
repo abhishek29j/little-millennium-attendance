@@ -38,9 +38,36 @@ const EMPTY = {
 export function AddStudentDialog({ classes }: { classes: ClassOption[] }) {
   const [open, setOpen] = useState(false);
   const [form, setForm] = useState({ ...EMPTY });
+  const [photo, setPhoto] = useState<File | null>(null);
+  const [photoPreview, setPhotoPreview] = useState<string | null>(null);
+  const fileRef = useRef<HTMLInputElement>(null);
   const queryClient = useQueryClient();
 
   const set = (k: keyof typeof EMPTY, v: string) => setForm((f) => ({ ...f, [k]: v }));
+
+  const clearPhoto = () => {
+    setPhoto(null);
+    setPhotoPreview((p) => {
+      if (p) URL.revokeObjectURL(p);
+      return null;
+    });
+    if (fileRef.current) fileRef.current.value = "";
+  };
+
+  const onPickPhoto = (file: File | undefined) => {
+    if (!file) return;
+    if (!file.type.startsWith("image/")) {
+      toast.error("Please choose an image file");
+      return;
+    }
+    if (file.size > 5 * 1024 * 1024) {
+      toast.error("Image must be under 5 MB");
+      return;
+    }
+    clearPhoto();
+    setPhoto(file);
+    setPhotoPreview(URL.createObjectURL(file));
+  };
 
   const mutation = useMutation({
     mutationFn: async () => {
@@ -50,10 +77,22 @@ export function AddStudentDialog({ classes }: { classes: ClassOption[] }) {
       if (!admission || admission.length > 50) throw new Error("Enter a valid admission number");
       if (!form.class_id) throw new Error("Select a class");
 
+      let photoPath: string | null = null;
+      if (photo) {
+        const ext = (photo.name.split(".").pop() || "jpg").toLowerCase().replace(/[^a-z0-9]/g, "");
+        const path = `${crypto.randomUUID()}.${ext || "jpg"}`;
+        const { error: uploadError } = await supabase.storage
+          .from(STUDENT_PHOTOS_BUCKET)
+          .upload(path, photo, { contentType: photo.type, upsert: false });
+        if (uploadError) throw new Error(`Photo upload failed: ${uploadError.message}`);
+        photoPath = path;
+      }
+
       const { error } = await supabase.from("students").insert({
         full_name: name,
         admission_number: admission,
         class_id: form.class_id,
+        photo_url: photoPath,
         roll_number: form.roll_number ? Number(form.roll_number) : null,
         date_of_birth: form.date_of_birth || null,
         gender: (form.gender || null) as "male" | "female" | "other" | null,
@@ -63,7 +102,11 @@ export function AddStudentDialog({ classes }: { classes: ClassOption[] }) {
         mobile_number: form.mobile_number.trim() || null,
         address: form.address.trim() || null,
       });
-      if (error) throw error;
+      if (error) {
+        if (photoPath) await supabase.storage.from(STUDENT_PHOTOS_BUCKET).remove([photoPath]);
+        throw error;
+      }
+
     },
     onSuccess: () => {
       toast.success(`${form.full_name} added`);
