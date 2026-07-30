@@ -24,9 +24,11 @@ export const Route = createFileRoute("/_authenticated/students")({
 function StudentsPage() {
   const [q, setQ] = useState("");
   const [classId, setClassId] = useState<string>("all");
+  const roleQuery = useQuery({ queryKey: ["current-role"], queryFn: fetchCurrentRole });
 
   const classesQuery = useQuery({
     queryKey: ["classes"],
+
     queryFn: async () => {
       const { data, error } = await supabase.from("classes").select("id, name, display_order").order("display_order");
       if (error) throw error;
