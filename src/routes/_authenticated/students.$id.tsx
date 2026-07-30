@@ -69,7 +69,6 @@ function StudentDetail() {
   if (query.isLoading) return <div className="rounded-3xl bg-muted p-10 text-center text-muted-foreground">Loading…</div>;
   if (!s) return <div className="rounded-3xl bg-muted p-10 text-center text-muted-foreground">Student not found.</div>;
 
-  const initials = s.full_name.split(" ").map((n: string) => n[0]).slice(0, 2).join("");
 
   return (
     <div className="space-y-6">
