@@ -4,6 +4,8 @@ import { useMemo, useState } from "react";
 import { Search } from "lucide-react";
 
 import { supabase } from "@/integrations/supabase/client";
+import { fetchCurrentRole } from "@/lib/attendance";
+import { AddStudentDialog } from "@/components/AddStudentDialog";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
@@ -22,9 +24,11 @@ export const Route = createFileRoute("/_authenticated/students")({
 function StudentsPage() {
   const [q, setQ] = useState("");
   const [classId, setClassId] = useState<string>("all");
+  const roleQuery = useQuery({ queryKey: ["current-role"], queryFn: fetchCurrentRole });
 
   const classesQuery = useQuery({
     queryKey: ["classes"],
+
     queryFn: async () => {
       const { data, error } = await supabase.from("classes").select("id, name, display_order").order("display_order");
       if (error) throw error;
@@ -61,9 +65,12 @@ function StudentsPage() {
 
   return (
     <div className="space-y-6">
-      <header>
-        <h1 className="text-3xl font-extrabold font-display">Students</h1>
-        <p className="text-sm text-muted-foreground">{filtered.length} students · {classesQuery.data?.length ?? 0} classes</p>
+      <header className="flex flex-wrap items-center justify-between gap-3">
+        <div>
+          <h1 className="text-3xl font-extrabold font-display">Students</h1>
+          <p className="text-sm text-muted-foreground">{filtered.length} students · {classesQuery.data?.length ?? 0} classes</p>
+        </div>
+        {roleQuery.data?.isAdmin && <AddStudentDialog classes={classesQuery.data ?? []} />}
       </header>
 
       <div className="flex flex-wrap gap-2">
