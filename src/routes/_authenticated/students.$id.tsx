@@ -102,12 +102,35 @@ function StudentDetail() {
         </div>
       </header>
 
+      <section className="rounded-3xl border border-border bg-card p-6 shadow-sm">
+        <h2 className="font-display text-lg font-bold">Student details</h2>
+        <div className="mt-4 grid gap-x-8 gap-y-4 sm:grid-cols-2 lg:grid-cols-3">
+          <Detail label="Full name" value={s.full_name} />
+          <Detail label="Admission number" value={s.admission_number} />
+          <Detail label="Class" value={s.classes?.name} />
+          <Detail label="Roll number" value={s.roll_number} />
+          <Detail label="Date of birth" value={s.date_of_birth ? new Date(s.date_of_birth).toLocaleDateString() : null} />
+          <Detail label="Gender" value={s.gender ? String(s.gender).replace(/^./, (c: string) => c.toUpperCase()) : null} />
+          <Detail label="Father's name" value={s.father_name} />
+          <Detail label="Mother's name" value={s.mother_name} />
+          <Detail label="Parent / guardian" value={s.parent_name} />
+          <Detail label="Mobile number" value={s.mobile_number} />
+          <Detail label="Emergency contact" value={s.emergency_contact} />
+          <Detail label="Admission date" value={s.admission_date ? new Date(s.admission_date).toLocaleDateString() : null} />
+          <Detail label="Status" value={s.is_active ? "Active" : "Inactive"} />
+          <div className="sm:col-span-2 lg:col-span-3">
+            <Detail label="Address" value={s.address} />
+          </div>
+        </div>
+      </section>
+
       <section className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <SummaryCard tone="leaf" label="Present days" value={totals.present} />
         <SummaryCard tone="berry" label="Absent days" value={totals.absent} />
         <SummaryCard tone="sun" label="Leave" value={totals.leave} />
         <SummaryCard tone="sky" label="Late" value={totals.late} />
       </section>
+
 
       <section className="rounded-3xl border border-border bg-card p-5 shadow-sm">
         <div className="mb-4 flex items-center justify-between">
