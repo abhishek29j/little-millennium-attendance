@@ -51,16 +51,18 @@ function AttendancePage() {
     else if (classesQuery.data?.[0]) setClassId(classesQuery.data[0].id);
   }, [isAdmin, teacherClassId, classesQuery.data, classId]);
 
+  const allClasses = classId === "all";
+
   const studentsQuery = useQuery({
     queryKey: ["students", classId],
     enabled: !!classId,
     queryFn: async () => {
-      const { data, error } = await supabase
+      let query = supabase
         .from("students")
-        .select("id, full_name, roll_number, admission_number, photo_url")
-        .eq("class_id", classId)
-        .eq("is_active", true)
-        .order("roll_number", { nullsFirst: true });
+        .select("id, full_name, roll_number, admission_number, photo_url, class_id")
+        .eq("is_active", true);
+      if (!allClasses) query = query.eq("class_id", classId);
+      const { data, error } = await query.order("roll_number", { nullsFirst: true });
       if (error) throw error;
       return data;
     },
@@ -70,15 +72,14 @@ function AttendancePage() {
     queryKey: ["attendance", classId, date],
     enabled: !!classId,
     queryFn: async () => {
-      const { data, error } = await supabase
-        .from("attendance")
-        .select("student_id, status")
-        .eq("class_id", classId)
-        .eq("date", date);
+      let query = supabase.from("attendance").select("student_id, status").eq("date", date);
+      if (!allClasses) query = query.eq("class_id", classId);
+      const { data, error } = await query;
       if (error) throw error;
       return data;
     },
   });
+
 
   // Seed selections from existing records
   useEffect(() => {
