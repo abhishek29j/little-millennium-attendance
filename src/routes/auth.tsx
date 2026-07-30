@@ -64,12 +64,10 @@ function AuthPage() {
   return (
     <div className="flex min-h-screen items-center justify-center px-4 py-10">
       <div className="w-full max-w-md">
-        <div className="mb-6 flex items-center justify-center gap-3">
-          <div className="grid h-12 w-12 place-items-center rounded-2xl bg-primary text-primary-foreground shadow-md">
-            <Sparkles className="h-6 w-6" />
-          </div>
+        <div className="mb-6 flex flex-col items-center gap-3 text-center">
+          <BrandLogo className="h-20" />
           <div>
-            <div className="text-xl font-bold font-display">Little Millennium</div>
+            <div className="text-xl font-bold font-display">Little Millennium Attendance</div>
             <div className="text-xs text-muted-foreground">Attendance Management</div>
           </div>
         </div>
