@@ -208,3 +208,12 @@ function SummaryCard({ tone, label, value }: { tone: string; label: string; valu
     </div>
   );
 }
+
+function Detail({ label, value }: { label: string; value?: string | number | null }) {
+  return (
+    <div>
+      <div className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">{label}</div>
+      <div className="mt-0.5 text-sm font-medium break-words">{value === null || value === undefined || value === "" ? "—" : value}</div>
+    </div>
+  );
+}
