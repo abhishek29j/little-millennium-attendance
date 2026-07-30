@@ -6,6 +6,7 @@ import { Search } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { fetchCurrentRole } from "@/lib/attendance";
 import { AddStudentDialog } from "@/components/AddStudentDialog";
+import { StudentPhoto } from "@/components/StudentPhoto";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
@@ -96,7 +97,6 @@ function StudentsPage() {
 
       <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
         {filtered.map((s) => {
-          const initials = s.full_name.split(" ").map((n) => n[0]).slice(0, 2).join("");
           return (
             <Link
               key={s.id}
@@ -105,11 +105,7 @@ function StudentsPage() {
               className="group rounded-3xl border border-border bg-card p-4 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md"
             >
               <div className="flex items-center gap-3">
-                {s.photo_url ? (
-                  <img src={s.photo_url} alt={s.full_name} className="h-12 w-12 rounded-full object-cover" />
-                ) : (
-                  <div className="grid h-12 w-12 place-items-center rounded-full bg-primary/15 font-bold text-primary">{initials}</div>
-                )}
+                <StudentPhoto name={s.full_name} value={s.photo_url} className="h-12 w-12" />
                 <div className="min-w-0 flex-1">
                   <div className="truncate font-semibold group-hover:text-primary">{s.full_name}</div>
                   <div className="text-xs text-muted-foreground">

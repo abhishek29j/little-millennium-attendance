@@ -4,6 +4,7 @@ import { useMemo, useState } from "react";
 import { ArrowLeft, ChevronLeft, ChevronRight, Cake, Phone, Home, User } from "lucide-react";
 
 import { supabase } from "@/integrations/supabase/client";
+import { StudentPhoto } from "@/components/StudentPhoto";
 import { STATUS_META, type AttendanceStatus } from "@/lib/attendance";
 import { cn } from "@/lib/utils";
 
@@ -78,11 +79,7 @@ function StudentDetail() {
 
       <header className="rounded-3xl border border-border bg-card p-6 shadow-sm">
         <div className="flex flex-wrap items-center gap-5">
-          {s.photo_url ? (
-            <img src={s.photo_url} alt={s.full_name} className="h-20 w-20 rounded-full object-cover" />
-          ) : (
-            <div className="grid h-20 w-20 place-items-center rounded-full bg-primary/15 text-2xl font-bold text-primary">{initials}</div>
-          )}
+          <StudentPhoto name={s.full_name} value={s.photo_url} className="h-20 w-20 text-2xl" />
           <div className="min-w-0 flex-1">
             <h1 className="text-2xl font-extrabold font-display">{s.full_name}</h1>
             <div className="mt-1 flex flex-wrap items-center gap-2 text-sm text-muted-foreground">

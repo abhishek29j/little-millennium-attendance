@@ -5,6 +5,7 @@ import { CalendarDays, Save, Zap } from "lucide-react";
 import { toast } from "sonner";
 
 import { supabase } from "@/integrations/supabase/client";
+import { StudentPhoto } from "@/components/StudentPhoto";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
@@ -256,11 +257,5 @@ function AttendancePage() {
 }
 
 function Avatar({ name, url }: { name: string; url: string | null }) {
-  const initials = name.split(" ").map((n) => n[0]).slice(0, 2).join("");
-  if (url) return <img src={url} alt={name} className="h-11 w-11 rounded-full object-cover" />;
-  return (
-    <div className="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-primary/15 text-sm font-bold text-primary-foreground/70">
-      <span className="text-primary">{initials}</span>
-    </div>
-  );
+  return <StudentPhoto name={name} value={url} className="h-11 w-11 text-sm" />;
 }
