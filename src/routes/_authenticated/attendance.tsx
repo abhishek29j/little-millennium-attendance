@@ -90,6 +90,10 @@ function AttendancePage() {
   }, [existingQuery.data]);
 
   const students = studentsQuery.data ?? [];
+  const classMap = useMemo(
+    () => new Map((classesQuery.data ?? []).map((c) => [c.id, c.name] as const)),
+    [classesQuery.data],
+  );
   const stats = useMemo(() => {
     const s = { present: 0, absent: 0, late: 0, leave: 0 };
     for (const st of students) {
