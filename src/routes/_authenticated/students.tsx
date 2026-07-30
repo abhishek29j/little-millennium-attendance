@@ -4,6 +4,8 @@ import { useMemo, useState } from "react";
 import { Search } from "lucide-react";
 
 import { supabase } from "@/integrations/supabase/client";
+import { fetchCurrentRole } from "@/lib/attendance";
+import { AddStudentDialog } from "@/components/AddStudentDialog";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
