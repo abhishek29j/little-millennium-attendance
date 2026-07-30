@@ -113,7 +113,7 @@ function AttendancePage() {
       .filter((s) => selections[s.id])
       .map((s) => ({
         student_id: s.id,
-        class_id: classId,
+        class_id: s.class_id,
         date,
         status: selections[s.id],
         marked_by: uid,
