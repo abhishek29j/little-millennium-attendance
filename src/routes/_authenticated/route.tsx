@@ -78,9 +78,7 @@ function AuthenticatedLayout() {
           )}
         >
           <div className="mb-6 hidden items-center gap-3 lg:flex">
-            <div className="grid h-11 w-11 place-items-center rounded-2xl bg-primary text-primary-foreground shadow">
-              <Sparkles className="h-5 w-5" />
-            </div>
+            <BrandLogo className="h-12" />
             <div className="leading-tight">
               <div className="font-bold font-display">Little Millennium</div>
               <div className="text-xs text-muted-foreground">Attendance</div>
