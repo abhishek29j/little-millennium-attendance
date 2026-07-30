@@ -65,9 +65,12 @@ function StudentsPage() {
 
   return (
     <div className="space-y-6">
-      <header>
-        <h1 className="text-3xl font-extrabold font-display">Students</h1>
-        <p className="text-sm text-muted-foreground">{filtered.length} students · {classesQuery.data?.length ?? 0} classes</p>
+      <header className="flex flex-wrap items-center justify-between gap-3">
+        <div>
+          <h1 className="text-3xl font-extrabold font-display">Students</h1>
+          <p className="text-sm text-muted-foreground">{filtered.length} students · {classesQuery.data?.length ?? 0} classes</p>
+        </div>
+        {roleQuery.data?.isAdmin && <AddStudentDialog classes={classesQuery.data ?? []} />}
       </header>
 
       <div className="flex flex-wrap gap-2">
