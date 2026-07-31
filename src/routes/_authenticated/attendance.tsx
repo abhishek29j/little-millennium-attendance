@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useMemo, useState } from "react";
-import { CalendarDays, Save, Zap } from "lucide-react";
+import { CalendarDays, Lock, Save, Zap } from "lucide-react";
 import { toast } from "sonner";
 
 import { supabase } from "@/integrations/supabase/client";
@@ -90,6 +90,14 @@ function AttendancePage() {
   }, [existingQuery.data]);
 
   const students = studentsQuery.data ?? [];
+  const lockedIds = useMemo(
+    () => new Set((existingQuery.data ?? []).map((r) => r.student_id)),
+    [existingQuery.data],
+  );
+  const unlockedStudents = useMemo(
+    () => students.filter((s) => !lockedIds.has(s.id)),
+    [students, lockedIds],
+  );
   const classMap = useMemo(
     () => new Map((classesQuery.data ?? []).map((c) => [c.id, c.name] as const)),
     [classesQuery.data],
@@ -105,7 +113,7 @@ function AttendancePage() {
 
   const markAll = (status: AttendanceStatus) => {
     const next: Record<string, AttendanceStatus> = { ...selections };
-    for (const s of students) next[s.id] = status;
+    for (const s of unlockedStudents) next[s.id] = status;
     setSelections(next);
   };
 
@@ -113,7 +121,7 @@ function AttendancePage() {
     if (!classId) return;
     const { data: userRes } = await supabase.auth.getUser();
     const uid = userRes.user?.id ?? null;
-    const rows = students
+    const rows = unlockedStudents
       .filter((s) => selections[s.id])
       .map((s) => ({
         student_id: s.id,
@@ -122,13 +130,13 @@ function AttendancePage() {
         status: selections[s.id],
         marked_by: uid,
       }));
-    if (rows.length === 0) return toast.error("Mark at least one student first.");
+    if (rows.length === 0) return toast.error("Mark at least one unlocked student first.");
 
     setSaving(true);
-    const { error } = await supabase.from("attendance").upsert(rows, { onConflict: "student_id,date" });
+    const { error } = await supabase.from("attendance").insert(rows);
     setSaving(false);
     if (error) return toast.error(error.message);
-    toast.success("Attendance saved successfully");
+    toast.success("Attendance saved and locked");
     qc.invalidateQueries({ queryKey: ["attendance", classId, date] });
     qc.invalidateQueries({ queryKey: ["dashboard"] });
   }
@@ -201,9 +209,15 @@ function AttendancePage() {
         )}
         {students.map((s) => {
           const sel = selections[s.id];
-          const initials = s.full_name.split(" ").map((n) => n[0]).slice(0, 2).join("");
+          const locked = lockedIds.has(s.id);
           return (
-            <div key={s.id} className="rounded-3xl border border-border bg-card p-4 shadow-sm">
+            <div
+              key={s.id}
+              className={cn(
+                "rounded-3xl border border-border bg-card p-4 shadow-sm",
+                locked && "opacity-90",
+              )}
+            >
               <div className="flex items-center gap-3">
                 <Avatar name={s.full_name} url={s.photo_url} />
                 <div className="min-w-0 flex-1">
@@ -218,29 +232,35 @@ function AttendancePage() {
                   </span>
                 )}
               </div>
-              <div className="mt-3 grid grid-cols-4 gap-2">
-                {(Object.keys(STATUS_META) as AttendanceStatus[]).map((st) => {
-                  const active = sel === st;
-                  const m = STATUS_META[st];
-                  return (
-                    <button
-                      key={st}
-                      type="button"
-                      onClick={() => setSelections((p) => ({ ...p, [s.id]: st }))}
-                      className={cn(
-                        "flex h-14 flex-col items-center justify-center rounded-2xl text-xs font-semibold transition",
-                        active
-                          ? `bg-${m.tone} text-${m.tone}-foreground shadow-md ring-2 ring-offset-2 ring-${m.tone}`
-                          : `bg-${m.tone}/15 text-${m.tone}-foreground hover:bg-${m.tone}/30`,
-                      )}
-                      aria-pressed={active}
-                    >
-                      <span className="text-lg leading-none">{m.emoji}</span>
-                      <span className="mt-0.5">{m.label}</span>
-                    </button>
-                  );
-                })}
-              </div>
+              {locked ? (
+                <div className="mt-3 flex items-center justify-center gap-2 rounded-2xl bg-muted px-3 py-3 text-xs font-semibold text-muted-foreground">
+                  <Lock className="h-3.5 w-3.5" /> Locked — saved attendance can't be changed
+                </div>
+              ) : (
+                <div className="mt-3 grid grid-cols-4 gap-2">
+                  {(Object.keys(STATUS_META) as AttendanceStatus[]).map((st) => {
+                    const active = sel === st;
+                    const m = STATUS_META[st];
+                    return (
+                      <button
+                        key={st}
+                        type="button"
+                        onClick={() => setSelections((p) => ({ ...p, [s.id]: st }))}
+                        className={cn(
+                          "flex h-14 flex-col items-center justify-center rounded-2xl text-xs font-semibold transition",
+                          active
+                            ? `bg-${m.tone} text-${m.tone}-foreground shadow-md ring-2 ring-offset-2 ring-${m.tone}`
+                            : `bg-${m.tone}/15 text-${m.tone}-foreground hover:bg-${m.tone}/30`,
+                        )}
+                        aria-pressed={active}
+                      >
+                        <span className="text-lg leading-none">{m.emoji}</span>
+                        <span className="mt-0.5">{m.label}</span>
+                      </button>
+                    );
+                  })}
+                </div>
+              )}
             </div>
           );
         })}
@@ -249,10 +269,25 @@ function AttendancePage() {
       {students.length > 0 && (
         <div className="sticky bottom-4 z-10 flex items-center justify-between rounded-full border border-border bg-card/90 p-3 pl-5 shadow-lg backdrop-blur">
           <div className="text-sm">
-            <span className="font-semibold">{Object.keys(selections).length}</span>
-            <span className="text-muted-foreground"> of {students.length} marked</span>
+            {unlockedStudents.length === 0 ? (
+              <span className="inline-flex items-center gap-1.5 font-semibold text-muted-foreground">
+                <Lock className="h-4 w-4" /> Attendance locked for this day
+              </span>
+            ) : (
+              <>
+                <span className="font-semibold">
+                  {unlockedStudents.filter((s) => selections[s.id]).length}
+                </span>
+                <span className="text-muted-foreground"> of {unlockedStudents.length} pending marked</span>
+              </>
+            )}
           </div>
-          <Button onClick={save} disabled={saving} size="lg" className="rounded-full">
+          <Button
+            onClick={save}
+            disabled={saving || unlockedStudents.length === 0}
+            size="lg"
+            className="rounded-full"
+          >
             <Save className="mr-2 h-4 w-4" />
             {saving ? "Saving…" : "Save attendance"}
           </Button>
