@@ -165,14 +165,16 @@ function Dashboard() {
 
 function StatCard({ tone, icon: Icon, label, value }: { tone: string; icon: React.ComponentType<{ className?: string }>; label: string; value: React.ReactNode }) {
   return (
-    <div className={`rounded-3xl border border-border bg-card p-5 shadow-sm`}>
-      <div className="flex items-center justify-between">
-        <div className={`grid h-8 w-8 place-items-center rounded-2xl bg-${tone}/40`}>
+    <div className="rounded-3xl border border-border bg-card p-4 shadow-sm sm:p-5">
+      <div className="flex items-center gap-3">
+        <div className={`grid h-8 w-8 shrink-0 place-items-center rounded-2xl bg-${tone}/40`}>
           <Icon className={`h-4 w-4 text-${tone}-foreground`} />
         </div>
-        <div className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">{label}</div>
+        <div className="min-w-0">
+          <div className="text-2xl font-extrabold leading-none font-display sm:text-3xl">{value}</div>
+          <div className="mt-1 text-xs font-semibold uppercase tracking-wide text-muted-foreground">{label}</div>
+        </div>
       </div>
-      <div className="mt-4 text-3xl font-extrabold font-display">{value}</div>
     </div>
   );
 }
