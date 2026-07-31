@@ -167,8 +167,8 @@ function StatCard({ tone, icon: Icon, label, value }: { tone: string; icon: Reac
   return (
     <div className={`rounded-3xl border border-border bg-card p-5 shadow-sm`}>
       <div className="flex items-center justify-between">
-        <div className={`grid h-11 w-11 place-items-center rounded-2xl bg-${tone}/40`}>
-          <Icon className={`h-5 w-5 text-${tone}-foreground`} />
+        <div className={`grid h-8 w-8 place-items-center rounded-2xl bg-${tone}/40`}>
+          <Icon className={`h-4 w-4 text-${tone}-foreground`} />
         </div>
         <div className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">{label}</div>
       </div>
