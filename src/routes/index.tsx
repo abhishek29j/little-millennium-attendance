@@ -52,8 +52,7 @@ function Landing() {
               <span className="bg-gradient-to-r from-primary via-berry to-tangerine bg-clip-text text-transparent">care</span>.
             </h1>
             <p className="mt-4 text-lg text-muted-foreground">
-              A cheerful, tablet-friendly attendance app for Little Millennium teachers and admins.
-              One-tap marking, colourful insights, and a full history for every child.
+              Welcome to the official Attendance Management System of Little Millennium Sitapur Road, designed exclusively for our students, teachers, and parents. We understand that every child's presence matters, and our digital attendance platform ensures that attendance is recorded accurately, securely, and effortlessly.
             </p>
             <div className="mt-8">
               <Link
