@@ -1,6 +1,6 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { CalendarCheck, LineChart, Users, Heart, ShieldCheck } from "lucide-react";
+import { CalendarCheck, LineChart, Users, ShieldCheck } from "lucide-react";
 import { BrandLogo } from "@/components/BrandLogo";
 import { supabase } from "@/integrations/supabase/client";
 
@@ -50,8 +50,8 @@ function Landing() {
       <main className="mx-auto max-w-6xl px-6 pb-24 pt-10">
         <section className="grid gap-10 lg:grid-cols-2 lg:items-center">
           <div>
-            <div className="inline-flex items-center gap-2 rounded-full bg-sun/40 px-3 py-1 text-xs font-semibold text-sun-foreground">
-              <Heart className="h-3.5 w-3.5" /> Built for preschools
+            <div className="inline-flex items-center rounded-full bg-sun/40 px-3 py-1 text-xs font-semibold text-sun-foreground">
+              Built for LM Sitapur Road
             </div>
             <h1 className="mt-4 text-4xl font-extrabold leading-tight tracking-tight md:text-5xl font-display">
               Every little one, marked with{" "}
