@@ -39,12 +39,6 @@ function Landing() {
             <div className="text-xs text-muted-foreground">Attendance Management</div>
           </div>
         </div>
-        <Link
-          to="/auth"
-          className="rounded-full bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground shadow-sm transition hover:brightness-105"
-        >
-          Sign in
-        </Link>
       </header>
 
       <main className="mx-auto max-w-6xl px-6 pb-24 pt-10">
@@ -61,19 +55,13 @@ function Landing() {
               A cheerful, tablet-friendly attendance app for Little Millennium teachers and admins.
               One-tap marking, colourful insights, and a full history for every child.
             </p>
-            <div className="mt-8 flex flex-wrap gap-3">
+            <div className="mt-8">
               <Link
                 to="/auth"
-                className="inline-flex items-center gap-2 rounded-full bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground shadow-md transition hover:brightness-105"
+                className="inline-flex items-center justify-center rounded-full bg-primary px-10 py-4 text-lg font-bold text-primary-foreground shadow-lg transition hover:brightness-105"
               >
-                Get started
+                Sign in
               </Link>
-              <a
-                href="#features"
-                className="inline-flex items-center gap-2 rounded-full border border-border bg-card px-6 py-3 text-sm font-semibold text-foreground transition hover:bg-accent"
-              >
-                Learn more
-              </a>
             </div>
             <div className="mt-6 flex items-center gap-2 text-xs text-muted-foreground">
               <ShieldCheck className="h-4 w-4 text-leaf" />
