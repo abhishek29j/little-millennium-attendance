@@ -4,7 +4,7 @@ export type AttendanceStatus = "present" | "absent" | "leave" | "late";
 
 export const STATUS_META: Record<AttendanceStatus, { label: string; emoji: string; tone: string; hex: string }> = {
   present: { label: "Present", emoji: "✅", tone: "leaf", hex: "oklch(0.79 0.14 150)" },
-  absent:  { label: "Absent",  emoji: "❌", tone: "berry", hex: "oklch(0.7 0.17 350)" },
+  absent:  { label: "Absent",  emoji: "❌", tone: "berry", hex: "oklch(0.62 0.22 25)" },
   leave:   { label: "Leave",   emoji: "🏠", tone: "sun", hex: "oklch(0.85 0.15 85)" },
   late:    { label: "Late",    emoji: "⏰", tone: "sky", hex: "oklch(0.72 0.14 235)" },
 };
