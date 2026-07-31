@@ -111,8 +111,8 @@
   --leaf-foreground: oklch(0.28 0.08 155);
   --tangerine: oklch(0.78 0.16 55);
   --tangerine-foreground: oklch(0.3 0.1 40);
-  --berry: oklch(0.7 0.17 350);
-  --berry-foreground: oklch(0.99 0.01 350);
+  --berry: oklch(0.62 0.22 25);
+  --berry-foreground: oklch(0.2 0 0);
 
   /* Chart tokens map onto the palette */
   --chart-1: oklch(0.68 0.14 235);
@@ -172,8 +172,8 @@
   --leaf-foreground: oklch(0.99 0.01 150);
   --tangerine: oklch(0.75 0.16 55);
   --tangerine-foreground: oklch(0.99 0.01 55);
-  --berry: oklch(0.72 0.17 350);
-  --berry-foreground: oklch(0.99 0.01 350);
+  --berry: oklch(0.62 0.22 25);
+  --berry-foreground: oklch(0.2 0 0);
 }
 
 @layer base {
