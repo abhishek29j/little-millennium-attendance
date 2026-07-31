@@ -90,6 +90,14 @@ function AttendancePage() {
   }, [existingQuery.data]);
 
   const students = studentsQuery.data ?? [];
+  const lockedIds = useMemo(
+    () => new Set((existingQuery.data ?? []).map((r) => r.student_id)),
+    [existingQuery.data],
+  );
+  const unlockedStudents = useMemo(
+    () => students.filter((s) => !lockedIds.has(s.id)),
+    [students, lockedIds],
+  );
   const classMap = useMemo(
     () => new Map((classesQuery.data ?? []).map((c) => [c.id, c.name] as const)),
     [classesQuery.data],
@@ -105,7 +113,7 @@ function AttendancePage() {
 
   const markAll = (status: AttendanceStatus) => {
     const next: Record<string, AttendanceStatus> = { ...selections };
-    for (const s of students) next[s.id] = status;
+    for (const s of unlockedStudents) next[s.id] = status;
     setSelections(next);
   };
 
