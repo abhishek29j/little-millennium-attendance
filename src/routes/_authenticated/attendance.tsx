@@ -121,7 +121,7 @@ function AttendancePage() {
     if (!classId) return;
     const { data: userRes } = await supabase.auth.getUser();
     const uid = userRes.user?.id ?? null;
-    const rows = students
+    const rows = unlockedStudents
       .filter((s) => selections[s.id])
       .map((s) => ({
         student_id: s.id,
@@ -130,13 +130,13 @@ function AttendancePage() {
         status: selections[s.id],
         marked_by: uid,
       }));
-    if (rows.length === 0) return toast.error("Mark at least one student first.");
+    if (rows.length === 0) return toast.error("Mark at least one unlocked student first.");
 
     setSaving(true);
-    const { error } = await supabase.from("attendance").upsert(rows, { onConflict: "student_id,date" });
+    const { error } = await supabase.from("attendance").insert(rows);
     setSaving(false);
     if (error) return toast.error(error.message);
-    toast.success("Attendance saved successfully");
+    toast.success("Attendance saved and locked");
     qc.invalidateQueries({ queryKey: ["attendance", classId, date] });
     qc.invalidateQueries({ queryKey: ["dashboard"] });
   }
