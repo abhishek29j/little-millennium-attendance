@@ -68,33 +68,6 @@ function Landing() {
             </div>
           </div>
 
-          <div className="relative">
-            <div className="absolute -left-6 -top-6 h-24 w-24 rounded-full bg-sun/60 blur-2xl" />
-            <div className="absolute -bottom-6 -right-6 h-32 w-32 rounded-full bg-berry/40 blur-2xl" />
-            <div className="relative rounded-3xl border border-border bg-card p-6 shadow-xl">
-              <div className="flex items-center justify-between">
-                <div className="text-sm font-semibold">Today · Developing Roots</div>
-                <div className="rounded-full bg-leaf/25 px-3 py-1 text-xs font-semibold text-leaf-foreground">92% present</div>
-              </div>
-              <div className="mt-4 space-y-3">
-                {[
-                  { name: "Aarav Sharma", status: "Present", tone: "leaf" },
-                  { name: "Diya Patel", status: "Present", tone: "leaf" },
-                  { name: "Kabir Iyer", status: "Late", tone: "sky" },
-                ].map((s) => (
-                  <div key={s.name} className="flex items-center justify-between rounded-2xl bg-muted/60 p-3">
-                    <div className="flex items-center gap-3">
-                      <div className={`grid h-10 w-10 place-items-center rounded-full bg-${s.tone}/40 text-sm font-bold`}>
-                        {s.name.split(" ").map((n) => n[0]).join("")}
-                      </div>
-                      <div className="text-sm font-medium">{s.name}</div>
-                    </div>
-                    <div className={`rounded-full bg-${s.tone}/30 px-3 py-1 text-xs font-semibold`}>{s.status}</div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
         </section>
 
         <section id="features" className="mt-24 grid gap-6 md:grid-cols-3">
