@@ -31,7 +31,7 @@ function Landing() {
 
   return (
     <div className="min-h-screen">
-      <header className="mx-auto flex max-w-6xl flex-col items-center justify-center px-6 py-10">
+      <header className="mx-auto flex max-w-6xl flex-col items-center justify-center px-6 py-6 sm:py-10">
         <div className="flex flex-col items-center gap-4">
           <BrandLogo className="h-24" />
           <div className="text-center">
