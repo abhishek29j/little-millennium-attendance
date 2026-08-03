@@ -41,7 +41,7 @@ function Landing() {
         </div>
       </header>
 
-      <main className="mx-auto max-w-6xl px-6 pb-24 pt-8 sm:pt-10">
+      <main className="mx-auto max-w-6xl px-6 pb-24 pt-2 sm:pt-10">
         <section className="mx-auto max-w-2xl sm:mx-0">
           <div className="text-center sm:text-left">
             <div className="flex justify-center sm:justify-start">
