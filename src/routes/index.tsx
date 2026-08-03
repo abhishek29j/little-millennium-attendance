@@ -31,12 +31,12 @@ function Landing() {
 
   return (
     <div className="min-h-screen">
-      <header className="mx-auto flex max-w-6xl items-center justify-between px-6 py-6">
-        <div className="flex flex-col items-center gap-3 sm:flex-row sm:items-center">
-          <BrandLogo className="h-24 sm:h-12" />
-          <div className="text-center sm:text-left">
-            <div className="text-lg font-bold font-display leading-none">Little Millennium</div>
-            <div className="text-xs text-muted-foreground">Attendance Management</div>
+      <header className="mx-auto flex max-w-6xl flex-col items-center justify-center px-6 py-10">
+        <div className="flex flex-col items-center gap-4">
+          <BrandLogo className="h-24" />
+          <div className="text-center">
+            <div className="text-2xl font-bold font-display leading-none">Little Millennium</div>
+            <div className="text-sm text-muted-foreground">Attendance Management</div>
           </div>
         </div>
       </header>
