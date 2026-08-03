@@ -31,7 +31,7 @@ function Landing() {
 
   return (
     <div className="min-h-screen">
-      <header className="mx-auto flex max-w-6xl flex-col items-center justify-center px-6 py-10">
+      <header className="mx-auto flex max-w-6xl flex-col items-center justify-center px-6 py-6 sm:py-10">
         <div className="flex flex-col items-center gap-4">
           <BrandLogo className="h-24" />
           <div className="text-center">
@@ -41,7 +41,7 @@ function Landing() {
         </div>
       </header>
 
-      <main className="mx-auto max-w-6xl px-6 pb-24 pt-8 sm:pt-10">
+      <main className="mx-auto max-w-6xl px-6 pb-24 pt-2 sm:pt-10">
         <section className="mx-auto max-w-2xl sm:mx-0">
           <div className="text-center sm:text-left">
             <div className="flex justify-center sm:justify-start">
