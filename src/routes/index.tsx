@@ -43,9 +43,9 @@ function Landing() {
       </header>
 
       <main className="mx-auto max-w-6xl px-6 pb-24 pt-2 sm:pt-10">
-        <section className="mx-auto max-w-2xl sm:mx-0">
-          <div className="text-center sm:text-left">
-            <div className="flex justify-center sm:justify-start">
+        <section className="grid grid-cols-1 items-center gap-8 lg:grid-cols-2">
+          <div className="mx-auto max-w-2xl text-center lg:mx-0 lg:text-left">
+            <div className="flex justify-center lg:justify-start">
               <div className="inline-flex items-center rounded-full bg-sun/40 px-3 py-1 text-xs font-semibold text-sun-foreground">
                 Built for LM Sitapur Road
               </div>
@@ -57,7 +57,7 @@ function Landing() {
             <p className="mt-4 text-lg text-muted-foreground">
               Welcome to the official Attendance Management System of Little Millennium Sitapur Road Branch, digital attendance platform ensures that attendance is recorded accurately, securely, and effortlessly.
             </p>
-            <div className="mt-8 flex justify-center sm:justify-start">
+            <div className="mt-8 flex justify-center lg:justify-start">
               <Link
                 to="/auth"
                 className="inline-flex items-center justify-center rounded-full bg-primary px-10 py-4 text-lg font-bold text-primary-foreground shadow-lg transition hover:brightness-105"
@@ -65,7 +65,7 @@ function Landing() {
                 Sign in
               </Link>
             </div>
-            <div className="mt-6 flex flex-col items-center gap-2 text-xs text-muted-foreground sm:flex-row sm:justify-start">
+            <div className="mt-6 flex flex-col items-center gap-2 text-xs text-muted-foreground sm:flex-row lg:justify-start">
               <span>Designed and developed by{" "}
                 <a href="https://softicetechnologies.com" target="_blank" rel="noopener noreferrer" className="font-semibold text-primary underline hover:text-primary/80">
                   Softice technologies
@@ -74,6 +74,13 @@ function Landing() {
             </div>
           </div>
 
+          <div className="hidden lg:flex lg:justify-end">
+            <img
+              src={heroImg.url}
+              alt="Teacher taking attendance with students and parents using the Little Millennium app"
+              className="h-auto w-full max-w-xl object-contain"
+            />
+          </div>
         </section>
 
         <section id="features" className="mt-24 grid gap-6 md:grid-cols-3">
