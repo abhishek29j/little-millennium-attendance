@@ -65,8 +65,11 @@ function Landing() {
               </Link>
             </div>
             <div className="mt-6 flex flex-col items-center gap-2 text-xs text-muted-foreground sm:flex-row sm:justify-start">
-              <ShieldCheck className="h-4 w-4 text-leaf" />
-              <span>Secure, role-based access. Teachers only see their assigned class.</span>
+              <span>Designed and developed by{" "}
+                <a href="https://softicetechnologies.com" target="_blank" rel="noopener noreferrer" className="font-semibold text-primary underline hover:text-primary/80">
+                  Softice technologies
+                </a>
+              </span>
             </div>
           </div>
 
