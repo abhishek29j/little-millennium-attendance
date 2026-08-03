@@ -41,20 +41,22 @@ function Landing() {
         </div>
       </header>
 
-      <main className="mx-auto max-w-6xl px-6 pb-24 pt-10">
-        <section className="max-w-2xl">
-          <div>
-            <div className="inline-flex items-center rounded-full bg-sun/40 px-3 py-1 text-xs font-semibold text-sun-foreground">
-              Built for LM Sitapur Road
+      <main className="mx-auto max-w-6xl px-6 pb-24 pt-8 sm:pt-10">
+        <section className="mx-auto max-w-2xl sm:mx-0">
+          <div className="text-center sm:text-left">
+            <div className="flex justify-center sm:justify-start">
+              <div className="inline-flex items-center rounded-full bg-sun/40 px-3 py-1 text-xs font-semibold text-sun-foreground">
+                Built for LM Sitapur Road
+              </div>
             </div>
-            <h1 className="mt-4 text-4xl font-extrabold leading-tight tracking-tight md:text-5xl font-display">
+            <h1 className="mt-5 text-4xl font-extrabold leading-tight tracking-tight md:text-5xl font-display sm:mt-4">
               Every little one, marked with{" "}
               <span className="bg-gradient-to-r from-primary via-berry to-tangerine bg-clip-text text-transparent">care</span>.
             </h1>
             <p className="mt-4 text-lg text-muted-foreground">
               Welcome to the official Attendance Management System of Little Millennium Sitapur Road, designed exclusively for our students, teachers, and parents. We understand that every child's presence matters, and our digital attendance platform ensures that attendance is recorded accurately, securely, and effortlessly.
             </p>
-            <div className="mt-8">
+            <div className="mt-8 flex justify-center sm:justify-start">
               <Link
                 to="/auth"
                 className="inline-flex items-center justify-center rounded-full bg-primary px-10 py-4 text-lg font-bold text-primary-foreground shadow-lg transition hover:brightness-105"
@@ -62,9 +64,9 @@ function Landing() {
                 Sign in
               </Link>
             </div>
-            <div className="mt-6 flex items-center gap-2 text-xs text-muted-foreground">
+            <div className="mt-6 flex flex-col items-center gap-2 text-xs text-muted-foreground sm:flex-row sm:justify-start">
               <ShieldCheck className="h-4 w-4 text-leaf" />
-              Secure, role-based access. Teachers only see their assigned class.
+              <span>Secure, role-based access. Teachers only see their assigned class.</span>
             </div>
           </div>
 
