@@ -54,7 +54,7 @@ function Landing() {
               <span className="bg-gradient-to-r from-primary via-berry to-tangerine bg-clip-text text-transparent">care</span>.
             </h1>
             <p className="mt-4 text-lg text-muted-foreground">
-              Welcome to the official Attendance Management System of Little Millennium Sitapur Road, designed exclusively for our students, teachers, and parents. We understand that every child's presence matters, and our digital attendance platform ensures that attendance is recorded accurately, securely, and effortlessly.
+              Welcome to the official Attendance Management System of Little Millennium Sitapur Road Branch, digital attendance platform ensures that attendance is recorded accurately, securely, and effortlessly.
             </p>
             <div className="mt-8 flex justify-center sm:justify-start">
               <Link
