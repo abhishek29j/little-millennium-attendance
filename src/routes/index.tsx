@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { CalendarCheck, LineChart, Users } from "lucide-react";
 import { BrandLogo } from "@/components/BrandLogo";
 import { supabase } from "@/integrations/supabase/client";
+import heroImg from "@/assets/heroimg.png.asset.json";
 
 export const Route = createFileRoute("/")({
   head: () => ({
