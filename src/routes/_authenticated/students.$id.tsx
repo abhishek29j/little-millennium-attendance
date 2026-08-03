@@ -5,6 +5,8 @@ import { ArrowLeft, ChevronLeft, ChevronRight, Cake, Phone, Home, User } from "l
 
 import { supabase } from "@/integrations/supabase/client";
 import { StudentPhoto } from "@/components/StudentPhoto";
+import { EditStudentPhoto } from "@/components/EditStudentPhoto";
+import { fetchCurrentRole } from "@/lib/attendance";
 import { STATUS_META, type AttendanceStatus } from "@/lib/attendance";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { cn } from "@/lib/utils";
@@ -28,6 +30,8 @@ function StudentDetail() {
   const [monthOffset, setMonthOffset] = useState(0);
   const [filterMonth, setFilterMonth] = useState<string>(String(new Date().getMonth()));
   const [filterYear, setFilterYear] = useState<string>(String(new Date().getFullYear()));
+
+  const roleQuery = useQuery({ queryKey: ["current-role"], queryFn: fetchCurrentRole });
 
   const query = useQuery({
     queryKey: ["student", id],
@@ -106,7 +110,16 @@ function StudentDetail() {
 
       <header className="rounded-3xl border border-border bg-card p-6 shadow-sm">
         <div className="flex flex-wrap items-center gap-5">
-          <StudentPhoto name={s.full_name} value={s.photo_url} className="h-20 w-20 text-2xl" />
+          {roleQuery.data?.isAdmin ? (
+            <EditStudentPhoto
+              studentId={id}
+              name={s.full_name}
+              value={s.photo_url}
+              onUpdated={() => void query.refetch()}
+            />
+          ) : (
+            <StudentPhoto name={s.full_name} value={s.photo_url} className="h-20 w-20 text-2xl" />
+          )}
           <div className="min-w-0 flex-1">
             <h1 className="text-2xl font-extrabold font-display">{s.full_name}</h1>
             <div className="mt-1 flex flex-wrap items-center gap-2 text-sm text-muted-foreground">
