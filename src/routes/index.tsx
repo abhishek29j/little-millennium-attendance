@@ -42,7 +42,7 @@ function Landing() {
       </header>
 
       <main className="mx-auto max-w-6xl px-6 pb-24 pt-10">
-        <section className="grid gap-10 lg:grid-cols-2 lg:items-center">
+        <section className="max-w-2xl">
           <div>
             <div className="inline-flex items-center rounded-full bg-sun/40 px-3 py-1 text-xs font-semibold text-sun-foreground">
               Built for LM Sitapur Road
