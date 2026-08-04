@@ -13,6 +13,21 @@ import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { supabase } from "@/integrations/supabase/client";
 import { Toaster } from "@/components/ui/sonner";
+import { PwaManager } from "@/components/PwaManager";
+
+/** iOS launch images: [css-pixel width x height at given DPR]. */
+const APPLE_SPLASH: Array<{ w: number; h: number; ratio: number }> = [
+  { w: 640, h: 1136, ratio: 2 },
+  { w: 750, h: 1334, ratio: 2 },
+  { w: 828, h: 1792, ratio: 2 },
+  { w: 1125, h: 2436, ratio: 3 },
+  { w: 1170, h: 2532, ratio: 3 },
+  { w: 1242, h: 2688, ratio: 3 },
+  { w: 1290, h: 2796, ratio: 3 },
+  { w: 1536, h: 2048, ratio: 2 },
+  { w: 1668, h: 2388, ratio: 2 },
+  { w: 2048, h: 2732, ratio: 2 },
+];
 
 function NotFoundComponent() {
   return (
