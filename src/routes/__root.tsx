@@ -83,6 +83,13 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { property: "og:description", content: "Modern attendance management for Little Millennium preschools." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
+      // PWA / mobile app tags
+      { name: "theme-color", content: "#2563EB" },
+      { name: "application-name", content: "Attendance" },
+      { name: "mobile-web-app-capable", content: "yes" },
+      { name: "apple-mobile-web-app-capable", content: "yes" },
+      { name: "apple-mobile-web-app-status-bar-style", content: "default" },
+      { name: "apple-mobile-web-app-title", content: "Attendance" },
     ],
     links: [
       { rel: "stylesheet", href: appCss },
