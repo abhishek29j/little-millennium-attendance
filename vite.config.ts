@@ -56,6 +56,8 @@ export default defineConfig({
         workbox: {
           globPatterns: ["**/*.{js,css,html,ico,png,jpg,svg,woff,woff2}"],
           cleanupOutdatedCaches: true,
+          // Adds the SKIP_WAITING message handler used by the "Refresh to update" action.
+          importScripts: ["/sw-skip-waiting.js"],
           clientsClaim: true,
           skipWaiting: false,
           navigateFallback: "/",
