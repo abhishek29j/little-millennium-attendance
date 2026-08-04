@@ -90,7 +90,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
   head: () => ({
     meta: [
       { charSet: "utf-8" },
-      { name: "viewport", content: "width=device-width, initial-scale=1" },
+      { name: "viewport", content: "width=device-width, initial-scale=1, viewport-fit=cover" },
       { title: "Little Millennium Attendance" },
       { name: "description", content: "Modern attendance management for Little Millennium preschools — mark attendance, track history, and see beautiful class insights at a glance." },
       { name: "author", content: "Little Millennium" },
