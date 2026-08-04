@@ -13,6 +13,21 @@ import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { supabase } from "@/integrations/supabase/client";
 import { Toaster } from "@/components/ui/sonner";
+import { PwaManager } from "@/components/PwaManager";
+
+/** iOS launch images: [css-pixel width x height at given DPR]. */
+const APPLE_SPLASH: Array<{ w: number; h: number; ratio: number }> = [
+  { w: 640, h: 1136, ratio: 2 },
+  { w: 750, h: 1334, ratio: 2 },
+  { w: 828, h: 1792, ratio: 2 },
+  { w: 1125, h: 2436, ratio: 3 },
+  { w: 1170, h: 2532, ratio: 3 },
+  { w: 1242, h: 2688, ratio: 3 },
+  { w: 1290, h: 2796, ratio: 3 },
+  { w: 1536, h: 2048, ratio: 2 },
+  { w: 1668, h: 2388, ratio: 2 },
+  { w: 2048, h: 2732, ratio: 2 },
+];
 
 function NotFoundComponent() {
   return (
@@ -75,7 +90,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
   head: () => ({
     meta: [
       { charSet: "utf-8" },
-      { name: "viewport", content: "width=device-width, initial-scale=1" },
+      { name: "viewport", content: "width=device-width, initial-scale=1, viewport-fit=cover" },
       { title: "Little Millennium Attendance" },
       { name: "description", content: "Modern attendance management for Little Millennium preschools — mark attendance, track history, and see beautiful class insights at a glance." },
       { name: "author", content: "Little Millennium" },
@@ -83,10 +98,28 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { property: "og:description", content: "Modern attendance management for Little Millennium preschools." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
+      // PWA / mobile app tags
+      { name: "theme-color", content: "#2563EB" },
+      { name: "application-name", content: "Attendance" },
+      { name: "mobile-web-app-capable", content: "yes" },
+      { name: "apple-mobile-web-app-capable", content: "yes" },
+      { name: "apple-mobile-web-app-status-bar-style", content: "default" },
+      { name: "apple-mobile-web-app-title", content: "Attendance" },
     ],
     links: [
       { rel: "stylesheet", href: appCss },
       { rel: "icon", href: "/favicon.jpg", type: "image/jpeg" },
+      // PWA manifest + platform icons
+      { rel: "manifest", href: "/manifest.webmanifest" },
+      { rel: "apple-touch-icon", href: "/apple-touch-icon.png", sizes: "180x180" },
+      { rel: "icon", href: "/icons/icon-192.png", type: "image/png", sizes: "192x192" },
+      { rel: "icon", href: "/icons/icon-512.png", type: "image/png", sizes: "512x512" },
+      // iOS splash screens (common device resolutions)
+      ...APPLE_SPLASH.map(({ w, h, ratio }) => ({
+        rel: "apple-touch-startup-image",
+        href: `/splash/splash-${w}x${h}.png`,
+        media: `(device-width: ${w / ratio}px) and (device-height: ${h / ratio}px) and (-webkit-device-pixel-ratio: ${ratio}) and (orientation: portrait)`,
+      })),
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
       { rel: "stylesheet", href: "https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Nunito:wght@400;500;600;700;800&display=swap" },
@@ -129,6 +162,8 @@ function RootComponent() {
     <QueryClientProvider client={queryClient}>
       <Outlet />
       <Toaster richColors position="top-right" />
+      {/* PWA: SW registration, update toast, install button */}
+      <PwaManager />
     </QueryClientProvider>
   );
 }
