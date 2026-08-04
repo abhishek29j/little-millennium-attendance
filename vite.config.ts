@@ -20,6 +20,8 @@ export default defineConfig({
         strategies: "generateSW",
         registerType: "autoUpdate",
         filename: "sw.js",
+        // Client build output dir (TanStack Start emits the browser bundle here).
+        outDir: "dist/client",
         // Registration is handled exclusively by src/lib/pwa.ts (guarded wrapper).
         injectRegister: null,
         // Never emit a service worker in dev / Lovable preview.
