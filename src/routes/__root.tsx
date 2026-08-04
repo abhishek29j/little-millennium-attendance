@@ -162,6 +162,8 @@ function RootComponent() {
     <QueryClientProvider client={queryClient}>
       <Outlet />
       <Toaster richColors position="top-right" />
+      {/* PWA: SW registration, update toast, install button */}
+      <PwaManager />
     </QueryClientProvider>
   );
 }
