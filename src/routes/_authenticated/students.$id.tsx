@@ -6,7 +6,6 @@ import { ArrowLeft, ChevronLeft, ChevronRight, Cake, Phone, Home, User } from "l
 import { supabase } from "@/integrations/supabase/client";
 import { StudentPhoto } from "@/components/StudentPhoto";
 import { EditStudentPhoto } from "@/components/EditStudentPhoto";
-import { DeleteStudentDialog } from "@/components/DeleteStudentDialog";
 import { fetchCurrentRole } from "@/lib/attendance";
 import { STATUS_META, type AttendanceStatus } from "@/lib/attendance";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -98,6 +97,10 @@ function StudentDetail() {
     const iso = new Date(viewMonth.getFullYear(), viewMonth.getMonth(), d, 12).toISOString().slice(0, 10);
     cells.push({ iso, day: d });
   }
+  const START_ISO = "2026-08-07";
+  const atStartMonth =
+    viewMonth.getFullYear() < 2026 || (viewMonth.getFullYear() === 2026 && viewMonth.getMonth() <= 7);
+
 
   if (query.isLoading) return <div className="rounded-3xl bg-muted p-10 text-center text-muted-foreground">Loading…</div>;
   if (!s) return <div className="rounded-3xl bg-muted p-10 text-center text-muted-foreground">Student not found.</div>;
@@ -134,12 +137,8 @@ function StudentDetail() {
             <div className="text-3xl font-extrabold font-display text-primary">{totals.pct}%</div>
             <div className="text-xs text-muted-foreground">Attendance</div>
           </div>
-          {roleQuery.data?.isAdmin && (
-            <div className="w-full sm:w-auto">
-              <DeleteStudentDialog studentId={id} name={s.full_name} photoUrl={s.photo_url} />
-            </div>
-          )}
         </div>
+
 
 
         <div className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
@@ -184,9 +183,14 @@ function StudentDetail() {
         <div className="mb-4 flex items-center justify-between">
           <h3 className="font-display text-lg font-bold">{monthLabel}</h3>
           <div className="flex items-center gap-1">
-            <button onClick={() => setMonthOffset((v) => v - 1)} className="grid h-9 w-9 place-items-center rounded-full bg-muted hover:bg-accent">
+            <button
+              onClick={() => setMonthOffset((v) => v - 1)}
+              disabled={atStartMonth}
+              className="grid h-9 w-9 place-items-center rounded-full bg-muted hover:bg-accent disabled:opacity-40"
+            >
               <ChevronLeft className="h-4 w-4" />
             </button>
+
             <button
               onClick={() => setMonthOffset((v) => v + 1)}
               disabled={monthOffset >= 0}
@@ -204,6 +208,7 @@ function StudentDetail() {
           {cells.map((c, i) => {
             const status = c.iso ? attMap.get(c.iso) : undefined;
             const isToday = c.iso === new Date().toISOString().slice(0, 10);
+            const beforeStart = !!c.iso && c.iso < START_ISO;
             return (
               <div
                 key={i}
@@ -213,9 +218,11 @@ function StudentDetail() {
                   c.iso && !status && "border-border bg-background text-muted-foreground",
                   status && `border-transparent bg-${STATUS_META[status].tone}/30 text-${STATUS_META[status].tone}-foreground font-semibold`,
                   isToday && "ring-2 ring-primary",
+                  beforeStart && "pointer-events-none border-transparent bg-muted/40 text-muted-foreground/40",
                 )}
-                title={status ? STATUS_META[status].label : ""}
+                title={beforeStart ? "Before attendance start date" : status ? STATUS_META[status].label : ""}
               >
+
                 {c.day && <span>{c.day}</span>}
                 {status && <span className="text-xs leading-none mt-0.5">{STATUS_META[status].emoji}</span>}
               </div>
