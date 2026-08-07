@@ -134,12 +134,8 @@ function StudentDetail() {
             <div className="text-3xl font-extrabold font-display text-primary">{totals.pct}%</div>
             <div className="text-xs text-muted-foreground">Attendance</div>
           </div>
-          {roleQuery.data?.isAdmin && (
-            <div className="w-full sm:w-auto">
-              <DeleteStudentDialog studentId={id} name={s.full_name} photoUrl={s.photo_url} />
-            </div>
-          )}
         </div>
+
 
 
         <div className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
