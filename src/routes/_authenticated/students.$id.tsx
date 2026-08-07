@@ -6,7 +6,6 @@ import { ArrowLeft, ChevronLeft, ChevronRight, Cake, Phone, Home, User } from "l
 import { supabase } from "@/integrations/supabase/client";
 import { StudentPhoto } from "@/components/StudentPhoto";
 import { EditStudentPhoto } from "@/components/EditStudentPhoto";
-import { DeleteStudentDialog } from "@/components/DeleteStudentDialog";
 import { fetchCurrentRole } from "@/lib/attendance";
 import { STATUS_META, type AttendanceStatus } from "@/lib/attendance";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
