@@ -97,6 +97,10 @@ function StudentDetail() {
     const iso = new Date(viewMonth.getFullYear(), viewMonth.getMonth(), d, 12).toISOString().slice(0, 10);
     cells.push({ iso, day: d });
   }
+  const START_ISO = "2026-08-07";
+  const atStartMonth =
+    viewMonth.getFullYear() < 2026 || (viewMonth.getFullYear() === 2026 && viewMonth.getMonth() <= 7);
+
 
   if (query.isLoading) return <div className="rounded-3xl bg-muted p-10 text-center text-muted-foreground">Loading…</div>;
   if (!s) return <div className="rounded-3xl bg-muted p-10 text-center text-muted-foreground">Student not found.</div>;
