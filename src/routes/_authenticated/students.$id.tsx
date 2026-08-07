@@ -208,6 +208,7 @@ function StudentDetail() {
           {cells.map((c, i) => {
             const status = c.iso ? attMap.get(c.iso) : undefined;
             const isToday = c.iso === new Date().toISOString().slice(0, 10);
+            const beforeStart = !!c.iso && c.iso < START_ISO;
             return (
               <div
                 key={i}
@@ -217,9 +218,11 @@ function StudentDetail() {
                   c.iso && !status && "border-border bg-background text-muted-foreground",
                   status && `border-transparent bg-${STATUS_META[status].tone}/30 text-${STATUS_META[status].tone}-foreground font-semibold`,
                   isToday && "ring-2 ring-primary",
+                  beforeStart && "pointer-events-none border-transparent bg-muted/40 text-muted-foreground/40",
                 )}
-                title={status ? STATUS_META[status].label : ""}
+                title={beforeStart ? "Before attendance start date" : status ? STATUS_META[status].label : ""}
               >
+
                 {c.day && <span>{c.day}</span>}
                 {status && <span className="text-xs leading-none mt-0.5">{STATUS_META[status].emoji}</span>}
               </div>
