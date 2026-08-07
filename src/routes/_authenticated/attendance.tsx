@@ -156,8 +156,10 @@ function AttendancePage() {
               value={date}
               onChange={(e) => setDate(e.target.value)}
               className="h-8 w-40 border-0 bg-transparent p-0 focus-visible:ring-0"
+              min="2026-08-07"
               max={todayISO()}
             />
+
           </div>
           <Select value={classId} onValueChange={setClassId} disabled={!isAdmin && !!teacherClassId}>
             <SelectTrigger className="w-56 rounded-full bg-card shadow-sm">
