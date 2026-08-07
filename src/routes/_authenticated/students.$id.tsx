@@ -183,9 +183,14 @@ function StudentDetail() {
         <div className="mb-4 flex items-center justify-between">
           <h3 className="font-display text-lg font-bold">{monthLabel}</h3>
           <div className="flex items-center gap-1">
-            <button onClick={() => setMonthOffset((v) => v - 1)} className="grid h-9 w-9 place-items-center rounded-full bg-muted hover:bg-accent">
+            <button
+              onClick={() => setMonthOffset((v) => v - 1)}
+              disabled={atStartMonth}
+              className="grid h-9 w-9 place-items-center rounded-full bg-muted hover:bg-accent disabled:opacity-40"
+            >
               <ChevronLeft className="h-4 w-4" />
             </button>
+
             <button
               onClick={() => setMonthOffset((v) => v + 1)}
               disabled={monthOffset >= 0}
