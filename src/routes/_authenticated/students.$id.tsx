@@ -6,6 +6,7 @@ import { ArrowLeft, ChevronLeft, ChevronRight, Cake, Phone, Home, User } from "l
 import { supabase } from "@/integrations/supabase/client";
 import { StudentPhoto } from "@/components/StudentPhoto";
 import { EditStudentPhoto } from "@/components/EditStudentPhoto";
+import { DeleteStudentDialog } from "@/components/DeleteStudentDialog";
 import { fetchCurrentRole } from "@/lib/attendance";
 import { STATUS_META, type AttendanceStatus } from "@/lib/attendance";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -133,7 +134,13 @@ function StudentDetail() {
             <div className="text-3xl font-extrabold font-display text-primary">{totals.pct}%</div>
             <div className="text-xs text-muted-foreground">Attendance</div>
           </div>
+          {roleQuery.data?.isAdmin && (
+            <div className="w-full sm:w-auto">
+              <DeleteStudentDialog studentId={id} name={s.full_name} photoUrl={s.photo_url} />
+            </div>
+          )}
         </div>
+
 
         <div className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
           <Fact icon={User} label="Parent" value={s.parent_name || s.father_name || "—"} />
